@@ -15,7 +15,7 @@ function initSocket() {
     socket.disconnect();
   }
 
-  socket = io("http://localhost:3000", {
+  socket = io("https://leetcodetogether.com", {
     transports: ["websocket"],
     autoConnect: false,
   });
