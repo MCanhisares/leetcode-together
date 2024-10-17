@@ -29,7 +29,7 @@ clearRooms();
 io.on('connection', (socket) => {
   console.log('New client connected');
 
-  socket.on('join', ({ room, username }) => {
+  socket.on('join', ({ room, username, initialCode }) => {
     console.log(`Attempt to join: ${username} to room ${room}`);
     
     // Remove user from previous room if exists
@@ -44,12 +44,15 @@ io.on('connection', (socket) => {
     // Join new room
     socket.join(room);
     if (!rooms.has(room)) {
-      rooms.set(room, { users: new Set(), code: '' });
+      rooms.set(room, { users: new Set(), code: initialCode || '' });
     }
     rooms.get(room).users.add(username);
     userSockets.set(`${username}-${room}`, socket.id);
 
+    // Send initial code to the joining user
     socket.emit('initialCode', rooms.get(room).code);
+    
+    // Notify all users in the room about the new user
     io.to(room).emit('userJoined', { username, users: Array.from(rooms.get(room).users) });
     console.log(`${username} joined room ${room}. Initial code:`, rooms.get(room).code);
   });
@@ -58,7 +61,8 @@ io.on('connection', (socket) => {
     console.log(`Received code change from ${username} in room ${room}`);
     if (rooms.has(room)) {
       rooms.get(room).code = code;
-      socket.to(room).emit('codeUpdate', { code, username });
+      // Broadcast the update to all users in the room, including the sender
+      io.to(room).emit('codeUpdate', { code, username });
       console.log(`Code updated in room ${room} by ${username}`);
     } else {
       console.log(`Room ${room} not found for code update`);
