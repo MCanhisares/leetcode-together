@@ -1,4 +1,10 @@
-// server.js
+/*
+ * Author: Marcel Canhisares
+ * 
+ * Released under the GNU AGPLv3 License
+ * Copyright (c) 2024 Marcel Canhisares
+ */
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');

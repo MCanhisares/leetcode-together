@@ -1,3 +1,10 @@
+/*
+ * Author: Marcel Canhisares
+ * 
+ * Released under the GNU AGPLv3 License
+ * Copyright (c) 2024 Marcel Canhisares
+ */
+
 let socket;
 let currentRoom = null;
 let username = null;

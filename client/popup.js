@@ -1,3 +1,9 @@
+/*
+ * Author: Marcel Canhisares
+ * 
+ * Released under the GNU AGPLv3 License.
+ * Copyright (c) 2024 Marcel Canhisares
+ */ 
 document.addEventListener('DOMContentLoaded', function() {
   const connectBtn = document.getElementById('connectBtn');
   const disconnectBtn = document.getElementById('disconnectBtn');

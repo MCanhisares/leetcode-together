@@ -1,3 +1,10 @@
+/*
+ * Author: Marcel Canhisares
+ * 
+ * Released under the GNU AGPLv3 License
+ * Copyright (c) 2024 Marcel Canhisares
+ */
+
 (function() {
   console.log("[MONACO PROXY] Interceptor loaded");
 
