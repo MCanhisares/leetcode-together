@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Leetcode Together",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "https://leetcode.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/*"],
+      "js": ["socket.io.esm.min.js", "content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}
