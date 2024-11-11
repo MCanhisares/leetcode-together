@@ -15,13 +15,28 @@ function initSocket() {
     socket.disconnect();
   }
 
-  socket = io("https://leetcodetogether.com", {
+  socket = io("http://localhost:3000", {
     transports: ["websocket"],
     autoConnect: false,
   });
 
-  socket.on("connect", () => {
-    console.log("[CONTENT] Connected to server");
+  socket.on('connect', () => {
+    console.log('[CONTENT] Connected to server');
+  });
+
+  socket.on('joinError', ({ message }) => {
+    console.log('[CONTENT] Join error:', message);
+    chrome.runtime.sendMessage({ 
+      type: 'joinError',
+      message: message 
+    });
+  });
+
+  socket.on('joinSuccess', () => {
+    console.log('[CONTENT] Joined successfully');
+    chrome.runtime.sendMessage({ 
+      type: 'joinSuccess' 
+    });
   });
 
   socket.on("disconnect", () => {
@@ -89,7 +104,7 @@ function sendToPage(message) {
   }
 }
 
-function joinRoom(roomCode, user) {
+function joinRoom(roomCode, user, password) {
   if (!socket) {
     initSocket();
   }
@@ -100,7 +115,13 @@ function joinRoom(roomCode, user) {
 
   currentRoom = roomCode;
   username = user;
-  socket.emit("join", { room: roomCode, username: user });
+
+  // Join room with password
+  socket.emit('join', { 
+    room: roomCode, 
+    username: user, 
+    password: password,
+  });
 }
 
 function leaveRoom() {
@@ -115,7 +136,7 @@ function leaveRoom() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[CONTENT] Received message from extension:", request);
   if (request.action === "connect") {
-    joinRoom(request.roomCode, request.username);
+    joinRoom(request.roomCode, request.username, request.password);
   } else if (request.action === "disconnect") {
     leaveRoom();
   }

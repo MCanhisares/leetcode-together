@@ -1,33 +1,54 @@
 /*
  * Author: Marcel Canhisares
- * 
+ *
  * Released under the GNU AGPLv3 License.
  * Copyright (c) 2024 Marcel Canhisares
- */ 
-document.addEventListener('DOMContentLoaded', function() {
-  const connectBtn = document.getElementById('connectBtn');
-  const disconnectBtn = document.getElementById('disconnectBtn');
-  const usernameInput = document.getElementById('username');
-  const roomCodeInput = document.getElementById('roomCode');
-  const statusDiv = document.getElementById('status');
+ */
+document.addEventListener("DOMContentLoaded", function () {
+  const connectBtn = document.getElementById("connectBtn");
+  const disconnectBtn = document.getElementById("disconnectBtn");
+  const usernameInput = document.getElementById("username");
+  const roomCodeInput = document.getElementById("roomCode");
+  const passwordInput = document.getElementById("password");
+  const statusDiv = document.getElementById("status");
 
-  connectBtn.addEventListener('click', () => {
+  function setStatus(message, isError = false) {
+    statusDiv.textContent = message;
+    statusDiv.className = isError ? "error" : "success";
+  }
+
+  connectBtn.addEventListener("click", () => {
     const username = usernameInput.value.trim();
     const roomCode = roomCodeInput.value.trim();
-    if (username && roomCode) {
-      chrome.runtime.sendMessage({
-        action: "connect",
-        username: username,
-        roomCode: roomCode
-      });
-      statusDiv.textContent = `Connecting to ${roomCode} as ${username}...`;
-    } else {
-      statusDiv.textContent = "Please enter both username and room code";
+    const password = passwordInput.value.trim();
+
+    if (!username || !roomCode || !password) {
+      setStatus("Please fill in all fields", true);
+      return;
     }
+
+    chrome.runtime.sendMessage({
+      action: "connect",
+      username: username,
+      roomCode: roomCode,
+      password: password,
+    });
+
+    setStatus("Connecting...");
   });
 
-  disconnectBtn.addEventListener('click', () => {
+  disconnectBtn.addEventListener("click", () => {
     chrome.runtime.sendMessage({ action: "disconnect" });
-    statusDiv.textContent = "Disconnected";
+    setStatus("Disconnected");
+    passwordInput.value = "";
+  });
+
+  // Listen for messages from the content script
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === "joinError") {
+      setStatus(message.message, true);
+    } else if (message.type === "joinSuccess") {
+      setStatus("Connected successfully!");
+    }
   });
 });

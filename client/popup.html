@@ -1,20 +1,80 @@
 <!DOCTYPE html>
 <html>
-  <head>    
-    <style>
-      body { width: 300px; padding: 10px; }
-      input, button { margin: 5px 0; width: 100%; }
-    </style>
-    
-  </head>
-  <body>
+<head>
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+    }
+    .input-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 8px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #disconnectBtn {
+      background-color: #f44336;
+    }
+    #disconnectBtn:hover {
+      background-color: #da190b;
+    }
+    #status {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    .error {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    .success {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="input-group">
+    <label for="username">Username:</label>
     <input type="text" id="username" placeholder="Enter username">
+  </div>
+  <div class="input-group">
+    <label for="roomCode">Room Code:</label>
     <input type="text" id="roomCode" placeholder="Enter room code">
-    <button id="connectBtn">Connect</button>
-    <button id="disconnectBtn">Disconnect</button>
-    <div id="status"></div>
-    <script src="popup.js"></script>
-    <script type="module" src="socket.io.esm.min.js"></script>
-    <script type="module" src="popup.js"></script>
-  </body>
+  </div>
+  <div class="input-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter room password">
+  </div>
+  <button id="connectBtn">Connect</button>
+  <button id="disconnectBtn">Disconnect</button>
+  <div id="status"></div>
+  <script src="popup.js"></script>
+</body>
 </html>
