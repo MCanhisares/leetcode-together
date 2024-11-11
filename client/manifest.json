@@ -4,6 +4,7 @@
   "version": "1.0",
   "description": "Collaborate on LeetCode problems in real-time",
   "permissions": [
+    "storage",
     "activeTab",
     "https://leetcode.com/*"
   ],

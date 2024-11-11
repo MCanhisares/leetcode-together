@@ -21,6 +21,10 @@
       box-sizing: border-box;
       margin-bottom: 4px;
     }
+    input:disabled {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+    }
     button {
       width: 100%;
       padding: 8px;
@@ -31,7 +35,7 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    button:hover {
+    button:hover:not(:disabled) {
       background-color: #45a049;
     }
     button:disabled {
@@ -41,7 +45,7 @@
     #disconnectBtn {
       background-color: #f44336;
     }
-    #disconnectBtn:hover {
+    #disconnectBtn:hover:not(:disabled) {
       background-color: #da190b;
     }
     #status {

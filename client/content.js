@@ -10,6 +10,18 @@ let currentRoom = null;
 let username = null;
 let isLocalChange = false;
 
+chrome.storage.local.get(['connectionState'], function(result) {
+  if (result.connectionState && result.connectionState.isConnected) {
+    const { username, roomCode } = result.connectionState;
+    // Request password from popup again for security
+    chrome.runtime.sendMessage({
+      type: 'requestPassword',
+      username: username,
+      roomCode: roomCode
+    });
+  }
+});
+
 function initSocket() {
   if (socket) {
     socket.disconnect();
@@ -126,7 +138,8 @@ function joinRoom(roomCode, user, password) {
 
 function leaveRoom() {
   if (socket && socket.connected && currentRoom) {
-    socket.emit("leaveRoom", { room: currentRoom, username });
+    socket.emit('leaveRoom', { room: currentRoom, username });
+    chrome.storage.local.remove('connectionState');
     currentRoom = null;
     username = null;
     socket.disconnect();
@@ -139,6 +152,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     joinRoom(request.roomCode, request.username, request.password);
   } else if (request.action === "disconnect") {
     leaveRoom();
+  } else if (request.action === "checkConnection") {
+    // Respond with current connection status
+    sendResponse({ 
+      isConnected: socket && socket.connected && currentRoom !== null,
+      room: currentRoom,
+      username: username
+    });
   }
 });
 
